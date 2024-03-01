@@ -2,25 +2,35 @@
 #include <string>
 #include <fstream>
 
-#define CONST_MAX_PARAMS 3
+#define CONST_MAX_PARAMS 5
 
 using namespace std;
 string _framename = "R3V";
-const string _paramnames[CONST_MAX_PARAMS] = {"-framename", "-framenumber", "-modelnumber"};
+const string _paramnames[CONST_MAX_PARAMS] = {"-framename", "-framenumber", "-modelnumber", "-startindex", "-startalpha"};
 int _framenumber = 0;
 int _modelnumber = 1;
-const char _spriteindex[37] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const char _alphabet[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+string _startindex = "0";
+string _startalpha = "A";
+const string _spriteindex = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const string _alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
+int FindIndexFromSprIndex(string index)
+{
+    return _spriteindex.find(index);
+}
+
+int FindAlpha(string alpha)
+{
+    return _alphabet.find(alpha);
+}
 
 int main(int argc, char *argv[])
 {
-	/*std::cout << "current argc : " << argc << endl;
-	for(int i = 1; i <= argc; i++)
-	{
-		std::cout << argv[i] << " " << i << "\n";
-	}
-	*/
+    #ifdef _DEBUG
+        std::cout << "DEBUG MODE" << endl;
+    #endif
+
     if(argc == 1)
     {
         std::cout << "[COMMANDS] \n\n  -framename : has to be either three or four digits. If only three is given, you will only be able to export at the max of 26 frames(0~25). Max value is 935(if the value is 4)\n\n   -framenumber : sets maximum number of frames. Keep in mind that the frame starts from 0\n\n   -modelnumber : sets how many models parts to get their animations frames. Also keep in mind that this starts from 0, but it works differently (f.e. passing 1 only provide model 0 frames.)" << endl;
@@ -121,6 +131,56 @@ int main(int argc, char *argv[])
                 _modelnumber = 1;
             }
         }
+
+        if(string(argv[i]) == "-startindex")
+        {
+            #ifdef _DEBUG
+                std::cout << "-startindex valid" << endl;
+            #endif 
+            _startindex = _nextparam;
+
+            for(int j = 0; j < CONST_MAX_PARAMS; j++)
+            {
+                if((_nextparam) == _paramnames[j])
+                {
+                    std::cout << "The parameter is empty." << endl;
+                    _startindex = "0";
+                    break;
+                }
+            }
+
+            if(FindIndexFromSprIndex(_startindex) >= 36)
+            {
+                std::cout << "-startindex received wrong value. Setting it to default value(\"0\")." << endl;
+                _startindex = "0";
+            }
+        }
+
+        if(string(argv[i]) == "-startalpha")
+        {
+            #ifdef _DEBUG
+        	    std::cout << "-startalpha valid" << endl;
+            #endif    
+        	
+            _startalpha = string(_nextparam);
+
+            for(int j = 0; j < CONST_MAX_PARAMS; j++)
+            {
+                if((_nextparam) == _paramnames[j] || string(_nextparam) == "")
+                {
+                    std::cout << "The parameter is empty." << endl;
+                    _startalpha = "A";
+                    break;
+                }
+            }
+
+            if(_alphabet.find(_startalpha) >= 36)
+            {
+                std::cout << "Warning! -startalpha's value is not either 3 or 4 digits. setting it to default value(A)" << endl;
+                _startalpha = "A";
+            }
+        }
+
         #ifdef _DEBUG
             std::cout << i << endl;	
         #endif 
@@ -131,7 +191,7 @@ int main(int argc, char *argv[])
     _outfile.open("modeldeaf.output");
 
     #ifdef _DEBUG
-	    std::cout << "framename : " << _framename << " framenumber : " << _framenumber << " modelnumber : " << _modelnumber << endl;
+	    std::cout << "framename : " << _framename << "\nframenumber : " << _framenumber << "\nmodelnumber : " << _modelnumber << "\nstartindex : " << _startindex << ", " << FindIndexFromSprIndex(_startindex) << "\nstartalpha : " << _startalpha << ", " << "\n";
     #endif
 	
     string _framemaster;
@@ -149,9 +209,14 @@ int main(int argc, char *argv[])
         {
             for(int k = 0; k < _modelnumber; k++)
             {
-                _framemaster += ("Frameindex " + _framename + _spriteindex[i / 26 % 36] + " " + _alphabet[i % 26] + " " + to_string(k) + " " + to_string(i) + "\n");
-                
-                //"Frameindex " << _framename << _spriteindex[i % 36] << " " << _alphabet[i % 26] << " " << k << " " << i
+                if((i / 26 % 36 + FindIndexFromSprIndex(_startindex)) >= 36)
+                    break;
+                _framemaster += ("Frameindex " + _framename + _spriteindex[i / (26 - FindIndexFromSprIndex(_startindex)) % 36 + FindIndexFromSprIndex(_startindex)] + " " + _alphabet[i % (26 - FindAlpha(_startalpha)) + FindAlpha(_startalpha)] + " " + to_string(k) + " " + to_string(i) + "\n");
+                if(i >= 26 - FindIndexFromSprIndex(_startindex))
+                {
+                    //_startalpha = "A";
+                    //_startindex = "0";
+                }
             }
         }	
     }
@@ -166,8 +231,8 @@ int main(int argc, char *argv[])
             if(i > 25){break;}
             for(int k = 0; k < _modelnumber; k++)
             {
-                _framemaster += ("Frameindex " + _framename + " " + _alphabet[i % 26] + " " + to_string(k) + " " + to_string(i) + "\n");
-                
+                _framemaster += ("Frameindex " + _framename + " " + _alphabet[i % 26 + FindAlpha(_startalpha)] + " " + to_string(k) + " " + to_string(i) + "\n");
+                _startalpha = "A";
                 //"Frameindex " << _framename << _spriteindex[i % 36] << " " << _alphabet[i % 26] << " " << k << " " << i
             }
         } 

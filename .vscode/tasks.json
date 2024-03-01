@@ -4,7 +4,7 @@
 		{
 			"type": "cppbuild",
 			"label": "C/C++: g++.exe build active file Release",
-			"command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+			"command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
@@ -14,7 +14,7 @@
 				"-static"
 			],
 			"options": {
-				"cwd": "C:\\msys64\\mingw64\\bin"
+				"cwd": "C:\\msys64\\ucrt64\\bin"
 			},
 			"problemMatcher": [
 				"$gcc"
@@ -23,12 +23,12 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"detail": "compiler: C:\\msys64\\mingw64\\bin\\g++.exe"
+			"detail": "compiler: C:\\msys64\\ucrt64\\bin\\g++.exe"
 		},
 		{
 			"type": "cppbuild",
 			"label": "C/C++: g++.exe build active file Debug",
-			"command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+			"command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
@@ -39,13 +39,33 @@
 				"-D_DEBUG"
 			],
 			"options": {
-				"cwd": "C:\\msys64\\mingw64\\bin"
+				"cwd": "C:\\msys64\\ucrt64\\bin"
 			},
 			"problemMatcher": [
 				"$gcc"
 			],
 			"group": "build",
-			"detail": "compiler: C:\\msys64\\mingw64\\bin\\g++.exe"
+			"detail": "compiler: C:\\msys64\\ucrt64\\bin\\g++.exe"
+		},
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe build active file",
+			"command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"${file}",
+				"-o",
+				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+			],
+			"options": {
+				"cwd": "C:\\msys64\\ucrt64\\bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: \"C:\\msys64\\ucrt64\\bin\\g++.exe\""
 		}
 	]
 }
