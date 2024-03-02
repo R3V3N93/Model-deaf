@@ -191,10 +191,11 @@ int main(int argc, char *argv[])
     _outfile.open("modeldeaf.output");
 
     #ifdef _DEBUG
-	    std::cout << "framename : " << _framename << "\nframenumber : " << _framenumber << "\nmodelnumber : " << _modelnumber << "\nstartindex : " << _startindex << ", " << FindIndexFromSprIndex(_startindex) << "\nstartalpha : " << _startalpha << ", " << "\n";
+	    std::cout << "framename : " << _framename << "\nframenumber : " << _framenumber << "\nmodelnumber : " << _modelnumber << "\nstartindex : " << _startindex << ", " << FindIndexFromSprIndex(_startindex) << "\nstartalpha : " << _startalpha << ", " << FindAlpha(_startalpha) << "\n";
     #endif
 	
     string _framemaster;
+
 
     try
     {
@@ -207,16 +208,24 @@ int main(int argc, char *argv[])
 
         for(int i = 0; i <= _framenumber; i++)
         {
+            int indexaddress = i / 26 % 36 + FindIndexFromSprIndex(_startindex);
+            int alphaaddress = i + FindAlpha(_startalpha);  
+
+            if(i > 25 - FindAlpha(_startalpha))
+            {
+                alphaaddress = (i - (26 - FindAlpha(_startalpha))) % 26;  
+                indexaddress = (i - (26 - FindAlpha(_startalpha))) / 26 % 36 + FindIndexFromSprIndex(_startindex) + 1;
+            }
+
+            if(indexaddress > 35)
+            {
+                std::cout << "out of frames!" << endl;
+                break;
+            }
+
             for(int k = 0; k < _modelnumber; k++)
             {
-                if((i / 26 % 36 + FindIndexFromSprIndex(_startindex)) >= 36)
-                    break;
-                _framemaster += ("Frameindex " + _framename + _spriteindex[i / (26 - FindIndexFromSprIndex(_startindex)) % 36 + FindIndexFromSprIndex(_startindex)] + " " + _alphabet[i % (26 - FindAlpha(_startalpha)) + FindAlpha(_startalpha)] + " " + to_string(k) + " " + to_string(i) + "\n");
-                if(i >= 26 - FindIndexFromSprIndex(_startindex))
-                {
-                    //_startalpha = "A";
-                    //_startindex = "0";
-                }
+                _framemaster += ("Frameindex " + _framename + _spriteindex[indexaddress] + " " + _alphabet[alphaaddress] + " " + to_string(k) + " " + to_string(i) + "\n");
             }
         }	
     }
@@ -233,7 +242,6 @@ int main(int argc, char *argv[])
             {
                 _framemaster += ("Frameindex " + _framename + " " + _alphabet[i % 26 + FindAlpha(_startalpha)] + " " + to_string(k) + " " + to_string(i) + "\n");
                 _startalpha = "A";
-                //"Frameindex " << _framename << _spriteindex[i % 36] << " " << _alphabet[i % 26] << " " << k << " " << i
             }
         } 
     }
