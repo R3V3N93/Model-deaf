@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
 
     if(argc == 1)
     {
-        std::cout << "[COMMANDS] \n\n  -framename : has to be either three or four digits. If only three is given, you will only be able to export at the max of 26 frames(0~25). Max value is 935(if the value is 4)\n\n   -framenumber : sets maximum number of frames. Keep in mind that the frame starts from 0\n\n   -modelnumber : sets how many models parts to get their animations frames. Also keep in mind that this starts from 0, but it works differently (f.e. passing 1 only provide model 0 frames.)" << endl;
+        std::cout << "[COMMANDS] \n\n   -framename : has to be either three or four digits. If only three is given, you will only be able to export at the max of 26 frames(0~25). Max value is 935(if the value is 4)\n\n   -framenumber : sets maximum number of frames. Keep in mind that the frame starts from 0\n\n   -modelnumber : sets how many models parts to get their animations frames. Also keep in mind that this starts from 0, but it works differently (f.e. passing 1 only provide model 0 frames.)\n\n   -startindex : Sets what index to start from. Available values are 0 ~ 9, A ~ Z. Other values may show unexpected result.\n\n   -startalpha : Sets what alphabet frame to start from. Available values are A ~ Z. Other values may show unexpected result.\n\n" 
+        << endl;
         return 0;
     }
 
