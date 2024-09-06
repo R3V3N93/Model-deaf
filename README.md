@@ -32,6 +32,9 @@ you'll get these from the command:
 ### How to compile this program?
 idk
 
+# NOTE : WITH THE NEW SetAnimation(), IT IS MOSTLY DEPRECATED FOR GZDOOM!
+# ZANDRONUM OR SPECIFIC MODELDEF PURPOSED!
+
 
 
 
